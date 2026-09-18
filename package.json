@@ -1,0 +1,9 @@
+{
+  "name": "todo-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "微型内存版 TODO CLI,零第三方依赖",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}

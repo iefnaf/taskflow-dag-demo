@@ -17,6 +17,16 @@ node src/cli.js --done 1
 - 集成:`src/cli.js`
 - 测试:node --test(Node 内置 test runner),`npm test` 一键全跑
 
+## 开发
+
+项目零第三方依赖,直接用 Node 内置 test runner:
+
+```
+npm test
+```
+
+等价于 `node --test test/*.test.js`,无需先执行 `npm install`。
+
 ## 工作方式
 
 每张子票由 taskflow 的 subagent 实现,reviewer agent 审查(gate),`npm test` 零 token 验证后关闭票据。
