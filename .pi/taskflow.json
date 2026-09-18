@@ -1,0 +1,8 @@
+{
+  "testCmd": "npm test",
+  "baseBranch": "main",
+  "branchPrefix": "tf",
+  "worktreeDir": ".wt",
+  "maxRounds": 3,
+  "merge": "ff"
+}
