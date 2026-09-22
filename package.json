@@ -1,0 +1,10 @@
+{
+  "name": "todo-cli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "零依赖内存版 TODO CLI",
+  "scripts": {
+    "test": "node --test test/"
+  }
+}
