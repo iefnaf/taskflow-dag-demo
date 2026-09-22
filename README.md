@@ -27,30 +27,42 @@ npm test
 
 ## 使用
 
-新增一条 TODO:
+存储为内存版,**每次 CLI 调用都是一个独立进程,数据不跨进程保留**。因此所有操作需在同一次调用中串联完成:
+
+新增并列出(一次调用内,命令按顺序作用于同一份进程内存储):
 
 ```
-$ node src/cli.js --add "买牛奶"
+$ node src/cli.js --add "买牛奶" --add "写代码" --list
 新增 #1: 买牛奶
-```
-
-列出全部条目(未完成显示 `[ ]`,完成显示 `[x]`):
-
-```
-$ node src/cli.js --list
+新增 #2: 写代码
 #1 [ ] 买牛奶
+#2 [ ] 写代码
 ```
 
-标记完成:
+新增、标记完成、再列出:
 
 ```
-$ node src/cli.js --done 1
+$ node src/cli.js --add "买牛奶" --done 1 --list
+新增 #1: 买牛奶
 完成 #1: 买牛奶
-$ node src/cli.js --list
 #1 [x] 买牛奶
 ```
 
-注:存储为内存版,进程退出后数据不保留。
+单独调用 `--list` 时,因为新的进程内没有数据,输出为空:
+
+```
+$ node src/cli.js --list
+$
+```
+
+传入非法参数时退出码为 1,并在 stderr 输出用法:
+
+```
+$ node src/cli.js --bogus
+未知参数: "--bogus"。用法: node src/cli.js --add <text> | --list | --done <id>
+$ echo $?
+1
+```
 
 ## 工作方式
 

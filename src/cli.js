@@ -5,36 +5,38 @@
  * 便于测试直接 import 其中的函数而不产生副作用。
  */
 
-import { parseArgs } from './args.js';
+import { parseCommands } from './args.js';
 import { createStore } from './store.js';
 
 export function main(argv = process.argv.slice(2), { io = process, store = createStore() } = {}) {
-  let cmd;
+  let commands;
   try {
-    cmd = parseArgs(argv);
+    commands = parseCommands(argv);
   } catch (err) {
     io.stderr.write(`${err.message}\n`);
     io.exitCode = 1;
     return;
   }
 
-  if (cmd.action === 'add') {
-    const item = store.add(cmd.text);
-    io.stdout.write(`新增 #${item.id}: ${item.text}\n`);
-    return;
-  }
-
-  if (cmd.action === 'list') {
-    for (const item of store.list()) {
-      io.stdout.write(`#${item.id} [${item.done ? 'x' : ' '}] ${item.text}\n`);
+  for (const cmd of commands) {
+    if (cmd.action === 'add') {
+      const item = store.add(cmd.text);
+      io.stdout.write(`新增 #${item.id}: ${item.text}\n`);
+      continue;
     }
-    return;
-  }
 
-  if (cmd.action === 'done') {
-    const item = store.list().find((entry) => entry.id === cmd.id);
-    store.done(cmd.id);
-    io.stdout.write(`完成 #${item.id}: ${item.text}\n`);
+    if (cmd.action === 'list') {
+      for (const item of store.list()) {
+        io.stdout.write(`#${item.id} [${item.done ? 'x' : ' '}] ${item.text}\n`);
+      }
+      continue;
+    }
+
+    if (cmd.action === 'done') {
+      const item = store.list().find((entry) => entry.id === cmd.id);
+      store.done(cmd.id);
+      io.stdout.write(`完成 #${item.id}: ${item.text}\n`);
+    }
   }
 }
 

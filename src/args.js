@@ -42,3 +42,32 @@ export function parseArgs(argv) {
 
   throw new Error(`未知参数: ${JSON.stringify(first)}。${USAGE}`);
 }
+
+/**
+ * 解析完整 argv 为命令序列:每个 --add/--list/--done 开启一个命令段,
+ * 其后的非 flag 参数归属于该段;每段仍用 parseArgs 校验。
+ *
+ * 这样内存版存储可以在单个进程内依次执行多条命令
+ * (例:`--add "买牛奶" --add "写代码" --list`)。
+ */
+export function parseCommands(argv) {
+  if (!Array.isArray(argv) || argv.length === 0) {
+    return [parseArgs(argv)]; // 触发缺参报错(含 usage)
+  }
+
+  const segments = [];
+  let current = null;
+  for (const token of argv) {
+    if (token === '--add' || token === '--list' || token === '--done') {
+      if (current) segments.push(current);
+      current = [token];
+    } else if (current) {
+      current.push(token);
+    } else {
+      // 以非 flag 开头:交给 parseArgs 统一抛「未知参数」
+      return [parseArgs([token])];
+    }
+  }
+  segments.push(current);
+  return segments.map((segment) => parseArgs(segment));
+}
