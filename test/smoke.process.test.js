@@ -44,6 +44,6 @@ test('smoke(进程级): --done 跨进程后 id 不存在,报错且退出码 1', 
 test('smoke(进程级): 无参数打印 usage 且退出码 1', async () => {
   const { stdout, stderr, code } = await runCli([]);
   assert.equal(stdout, '');
-  assert.match(stderr, /^usage: cli --add <text> \| --list \| --done <id>$/);
+  assert.match(stderr, /^usage: cli --add <text> \| --list \| --done <id>\n$/);
   assert.equal(code, 1);
 });
