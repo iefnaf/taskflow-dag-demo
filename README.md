@@ -25,6 +25,33 @@ node src/cli.js --done 1
 npm test
 ```
 
+## 使用
+
+新增一条 TODO:
+
+```
+$ node src/cli.js --add "买牛奶"
+新增 #1: 买牛奶
+```
+
+列出全部条目(未完成显示 `[ ]`,完成显示 `[x]`):
+
+```
+$ node src/cli.js --list
+#1 [ ] 买牛奶
+```
+
+标记完成:
+
+```
+$ node src/cli.js --done 1
+完成 #1: 买牛奶
+$ node src/cli.js --list
+#1 [x] 买牛奶
+```
+
+注:存储为内存版,进程退出后数据不保留。
+
 ## 工作方式
 
 每张子票由 taskflow 的 subagent 实现,reviewer agent 审查(gate),`npm test` 零 token 验证后关闭票据。
