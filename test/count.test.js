@@ -41,7 +41,7 @@ test('count: 多余参数打印 usage 到 stderr 且退出码 1', () => {
   process.exitCode = 0;
   const { out, err } = run(['--count', 'x']);
   assert.equal(out, '');
-  assert.match(err, /^usage: cli --add <text> \| --list \| --done <id> \| --remove <id> \| --count \| --version\n$/);
+  assert.match(err, /^usage: cli --add <text> \| --list \| --done <id> \| --remove <id> \| --find <text> \| --count \| --version\n$/);
   assert.equal(process.exitCode, 1);
   process.exitCode = 0;
 });

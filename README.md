@@ -4,16 +4,18 @@
 
 ## 目标
 
-用 Node.js 内置能力(零第三方依赖)实现一个内存版 TODO CLI,支持四个子命令(每次调用都是新进程、从空存储开始):
+用 Node.js 内置能力(零第三方依赖)实现一个内存版 TODO CLI,支持六个子命令(每次调用都是新进程、从空存储开始):
 
 ```
 node src/cli.js --add "买牛奶"   # added #1 买牛奶
 node src/cli.js --list           # 新进程空存储,无输出
 node src/cli.js --done 1         # 新进程中 id 不存在:TODO #1 not found(退出码 1)
+node src/cli.js --remove 1       # 新进程中 id 不存在:TODO #1 not found(退出码 1)
+node src/cli.js --find 牛        # 新进程空存储,无输出(退出码 0)
 node src/cli.js --count          # 新进程空存储:total=0 pending=0 done=0
 ```
 
-- 存储:`src/store.js` — createStore() 提供 add/list/done
+- 存储:`src/store.js` — createStore() 提供 add/list/done/remove
 - 参数解析:`src/args.js` — parseArgs()
 - 集成:`src/cli.js`
 - 测试:node --test(Node 内置 test runner),`npm test` 一键全跑
@@ -43,6 +45,20 @@ $ node src/cli.js --done 1
 TODO #1 not found
 ```
 
+删除条目(同样是新进程,id 不存在,报错到 stderr,退出码 1):
+
+```
+$ node src/cli.js --remove 1
+TODO #1 not found
+```
+
+按文本过滤条目(新进程空存储,无匹配,无输出,退出码 0;大小写不敏感):
+
+```
+$ node src/cli.js --find 牛
+$
+```
+
 统计汇总(新进程空存储;只读,不改变存储):
 
 ```
@@ -62,7 +78,7 @@ total=2 pending=1 done=1
 
 ```
 $ node src/cli.js
-usage: cli --add <text> | --list | --done <id> | --count | --version
+usage: cli --add <text> | --list | --done <id> | --remove <id> | --find <text> | --count | --version
 ```
 
 查看版本(从 package.json 读取,不硬编码,退出码 0):
