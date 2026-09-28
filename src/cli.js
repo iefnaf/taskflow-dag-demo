@@ -38,6 +38,10 @@ export function main(argv = process.argv.slice(2), { out = process.stdout, err =
     for (const item of store.list()) {
       out.write(`#${item.id} [${item.done ? 'x' : ' '}] ${item.text}\n`);
     }
+  } else if (parsed.action === 'count') {
+    const items = store.list();
+    const done = items.filter((i) => i.done).length;
+    out.write(`total=${items.length} pending=${items.length - done} done=${done}\n`);
   } else {
     let item;
     try {

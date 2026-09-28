@@ -105,6 +105,6 @@ test('e2e: 真实进程 --version 打印 name@version 且退出码 0', async () 
 test('e2e: 非法参数退出码 1 且 stderr 含 usage', async () => {
   assert.deepEqual(
     await runCli([]),
-    { stdout: '', stderr: 'usage: cli --add <text> | --list | --done <id> | --version\n', code: 1 },
+    { stdout: '', stderr: 'usage: cli --add <text> | --list | --done <id> | --count | --version\n', code: 1 },
   );
 });

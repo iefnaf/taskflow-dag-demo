@@ -50,7 +50,7 @@ test('cli: done 打印完成条目,list 显示 [x]', () => {
 test('cli: 非法参数打印 usage 到 stderr 且退出码 1', () => {
   process.exitCode = 0;
   const { err } = run([]);
-  assert.match(err, /^usage: cli --add <text> | --list | --done <id>$/);
+  assert.match(err, /^usage: cli --add <text> | --list | --done <id>/);
   assert.equal(process.exitCode, 1);
   process.exitCode = 0;
 });

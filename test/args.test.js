@@ -18,6 +18,11 @@ test('args: --list 解析为 list 动作', () => {
   assert.deepEqual(parseArgs(['--list']), { action: 'list' });
 });
 
+test('args: --count 解析为 count 动作', () => {
+  assert.deepEqual(parseArgs(['--count']), { action: 'count' });
+  assert.throws(() => parseArgs(['--count', 'extra']), /usage/);
+});
+
 test('args: --done 将 id 数字化', () => {
   assert.deepEqual(parseArgs(['--done', '3']), { action: 'done', id: 3 });
 });
