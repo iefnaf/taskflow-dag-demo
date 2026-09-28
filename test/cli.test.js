@@ -50,6 +50,32 @@ test('cli: done 打印完成条目,list 显示 [x]', () => {
   assert.equal(listed, '#1 [x] 买牛奶\n');
 });
 
+test('cli: remove 打印被删条目,list/count 同步', () => {
+  run(['--add', '待删']);
+  const { out, err } = run(['--remove', '2']);
+  assert.equal(out, 'removed #2 待删\n');
+  assert.equal(err, '');
+  assert.equal(run(['--list']).out, '#1 [x] 买牛奶\n');
+  assert.equal(run(['--count']).out, 'total=1 pending=0 done=1\n');
+});
+
+test('cli: remove 不存在的 id 报错到 stderr 且退出码 1', () => {
+  process.exitCode = 0;
+  const { out, err } = run(['--remove', '99']);
+  assert.equal(out, '');
+  assert.equal(err, 'TODO #99 not found\n');
+  assert.equal(process.exitCode, 1);
+  process.exitCode = 0;
+});
+
+test('cli: remove 非法参数打印 usage 到 stderr 且退出码 1', () => {
+  process.exitCode = 0;
+  const { err } = run(['--remove', 'abc']);
+  assert.match(err, /^usage: cli --add <text> \| --list \| --done <id> \| --remove <id>/);
+  assert.equal(process.exitCode, 1);
+  process.exitCode = 0;
+});
+
 test('cli: 非法参数打印 usage 到 stderr 且退出码 1', () => {
   process.exitCode = 0;
   const { err } = run([]);

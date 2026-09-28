@@ -27,6 +27,16 @@ test('args: --done 将 id 数字化', () => {
   assert.deepEqual(parseArgs(['--done', '3']), { action: 'done', id: 3 });
 });
 
+test('args: --remove 将 id 数字化', () => {
+  assert.deepEqual(parseArgs(['--remove', '3']), { action: 'remove', id: 3 });
+});
+
+test('args: --remove 非法 id 抛错', () => {
+  assert.throws(() => parseArgs(['--remove', 'abc']), /usage/);
+  assert.throws(() => parseArgs(['--remove']), /usage/);
+  assert.throws(() => parseArgs(['--remove', '0']), /usage/);
+});
+
 test('args: 非法 id 抛错', () => {
   assert.throws(() => parseArgs(['--done', 'abc']), /usage/);
   assert.throws(() => parseArgs(['--done']), /usage/);
@@ -34,7 +44,7 @@ test('args: 非法 id 抛错', () => {
 });
 
 test('args: 未知参数抛错', () => {
-  assert.throws(() => parseArgs(['--remove', 'x']), /usage/);
+  assert.throws(() => parseArgs(['--delete', '1']), /usage/);
   assert.throws(() => parseArgs(['add']), /usage/);
 });
 

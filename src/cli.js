@@ -42,7 +42,7 @@ export function main(argv = process.argv.slice(2), { out = process.stdout, err =
     const items = store.list();
     const done = items.filter((i) => i.done).length;
     out.write(`total=${items.length} pending=${items.length - done} done=${done}\n`);
-  } else {
+  } else if (parsed.action === 'done') {
     let item;
     try {
       item = store.done(parsed.id);
@@ -52,6 +52,16 @@ export function main(argv = process.argv.slice(2), { out = process.stdout, err =
       return;
     }
     out.write(`done #${item.id} ${item.text}\n`);
+  } else if (parsed.action === 'remove') {
+    let item;
+    try {
+      item = store.remove(parsed.id);
+    } catch {
+      err.write(`TODO #${parsed.id} not found\n`);
+      process.exitCode = 1;
+      return;
+    }
+    out.write(`removed #${item.id} ${item.text}\n`);
   }
 }
 

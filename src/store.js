@@ -1,5 +1,5 @@
 /**
- * 内存版 TODO 存储:createStore() 返回 { add, list, done }
+ * 内存版 TODO 存储:createStore() 返回 { add, list, done, remove }
  */
 export function createStore() {
   let nextId = 1;
@@ -25,6 +25,16 @@ export function createStore() {
         throw new Error(`TODO #${id} not found`);
       }
       item.done = true;
+      return { ...item };
+    },
+
+    /** 删除对应条目并返回被删条目快照;id 不存在时抛错。id 不复用、不重排 */
+    remove(id) {
+      const index = items.findIndex((i) => i.id === id);
+      if (index === -1) {
+        throw new Error(`TODO #${id} not found`);
+      }
+      const [item] = items.splice(index, 1);
       return { ...item };
     },
   };

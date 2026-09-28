@@ -36,3 +36,30 @@ test('store: done 对不存在的 id 抛错', () => {
   const store = createStore();
   assert.throws(() => store.done(42), /not found/);
 });
+
+test('store: remove 删除条目并返回被删快照', () => {
+  const store = createStore();
+  store.add('a');
+  store.add('b');
+  const removed = store.remove(1);
+  assert.deepEqual(removed, { id: 1, text: 'a', done: false });
+  assert.deepEqual(store.list(), [{ id: 2, text: 'b', done: false }]);
+});
+
+test('store: remove 后 id 不复用、不重排', () => {
+  const store = createStore();
+  store.add('a');
+  store.add('b');
+  store.remove(1);
+  const c = store.add('c');
+  assert.equal(c.id, 3);
+  assert.deepEqual(store.list(), [
+    { id: 2, text: 'b', done: false },
+    { id: 3, text: 'c', done: false },
+  ]);
+});
+
+test('store: remove 对不存在的 id 抛错', () => {
+  const store = createStore();
+  assert.throws(() => store.remove(42), /TODO #42 not found/);
+});

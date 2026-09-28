@@ -1,7 +1,7 @@
 /**
  * CLI 参数解析:与存储解耦的纯函数。
  */
-const USAGE = 'usage: cli --add <text> | --list | --done <id> | --count | --version';
+const USAGE = 'usage: cli --add <text> | --list | --done <id> | --remove <id> | --count | --version';
 
 export function parseArgs(argv) {
   if (!Array.isArray(argv) || argv.length === 0) {
@@ -48,6 +48,14 @@ export function parseArgs(argv) {
       throw new Error(USAGE);
     }
     return { action: 'done', id };
+  }
+
+  if (cmd === '--remove') {
+    const id = Number(value);
+    if (value === undefined || !Number.isInteger(id) || id < 1) {
+      throw new Error(USAGE);
+    }
+    return { action: 'remove', id };
   }
 
   throw new Error(USAGE);
