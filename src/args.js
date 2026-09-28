@@ -1,7 +1,7 @@
 /**
  * CLI 参数解析:与存储解耦的纯函数。
  */
-const USAGE = 'usage: cli --add <text> | --list | --done <id>';
+const USAGE = 'usage: cli --add <text> | --list | --done <id> | --version';
 
 export function parseArgs(argv) {
   if (!Array.isArray(argv) || argv.length === 0) {
@@ -26,6 +26,13 @@ export function parseArgs(argv) {
       throw new Error(USAGE);
     }
     return { action: 'list' };
+  }
+
+  if (cmd === '--version') {
+    if (argv.length !== 1) {
+      throw new Error(USAGE);
+    }
+    return { action: 'version' };
   }
 
   if (cmd === '--done') {

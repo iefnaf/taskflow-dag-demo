@@ -3,11 +3,18 @@
  * 存储为模块级单例:同一进程内的多次调用共享数据(便于测试 import);
  * 每个命令行调用都是独立进程,数据不跨调用持久化。
  */
+import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from './args.js';
 import { createStore } from './store.js';
 
 const store = createStore();
+
+/** 从 package.json 读取 name@version(不硬编码)。 */
+export function versionString() {
+  const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  return `${pkg.name}@${pkg.version}`;
+}
 
 export function main(argv = process.argv.slice(2), { out = process.stdout, err = process.stderr } = {}) {
   let parsed;
@@ -16,6 +23,11 @@ export function main(argv = process.argv.slice(2), { out = process.stdout, err =
   } catch (e) {
     err.write(`${e.message}\n`);
     process.exitCode = 1;
+    return;
+  }
+
+  if (parsed.action === 'version') {
+    out.write(`${versionString()}\n`);
     return;
   }
 

@@ -48,7 +48,14 @@ TODO #1 not found
 
 ```
 $ node src/cli.js
-usage: cli --add <text> | --list | --done <id>
+usage: cli --add <text> | --list | --done <id> | --version
+```
+
+查看版本(从 package.json 读取,不硬编码,退出码 0):
+
+```
+$ node src/cli.js --version
+todo-cli@0.1.0
 ```
 
 ## 开发

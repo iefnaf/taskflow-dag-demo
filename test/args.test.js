@@ -9,6 +9,11 @@ test('args: --add 解析为 add 动作', () => {
   });
 });
 
+test('args: --version 解析为 version 动作', () => {
+  assert.deepEqual(parseArgs(['--version']), { action: 'version' });
+  assert.throws(() => parseArgs(['--version', 'extra']), /usage/);
+});
+
 test('args: --list 解析为 list 动作', () => {
   assert.deepEqual(parseArgs(['--list']), { action: 'list' });
 });

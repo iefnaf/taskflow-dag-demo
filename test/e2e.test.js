@@ -19,6 +19,7 @@ import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 const exec = promisify(execFile);
@@ -93,9 +94,17 @@ test('e2e: 真实进程 --done 1 在空存储上报 not found、退出码 1', as
   );
 });
 
+test('e2e: 真实进程 --version 打印 name@version 且退出码 0', async () => {
+  const pkg = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
+  assert.deepEqual(
+    await runCli(['--version']),
+    { stdout: `${pkg.name}@${pkg.version}\n`, stderr: '', code: 0 },
+  );
+});
+
 test('e2e: 非法参数退出码 1 且 stderr 含 usage', async () => {
   assert.deepEqual(
     await runCli([]),
-    { stdout: '', stderr: 'usage: cli --add <text> | --list | --done <id>\n', code: 1 },
+    { stdout: '', stderr: 'usage: cli --add <text> | --list | --done <id> | --version\n', code: 1 },
   );
 });

@@ -6,6 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -41,9 +42,17 @@ test('smoke(进程级): --done 跨进程后 id 不存在,报错且退出码 1', 
   assert.equal(code, 1);
 });
 
+test('smoke(进程级): --version 打印 name@version 且退出码 0', async () => {
+  const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  const { stdout, stderr, code } = await runCli(['--version']);
+  assert.equal(stdout, `${pkg.name}@${pkg.version}\n`);
+  assert.equal(stderr, '');
+  assert.equal(code, 0);
+});
+
 test('smoke(进程级): 无参数打印 usage 且退出码 1', async () => {
   const { stdout, stderr, code } = await runCli([]);
   assert.equal(stdout, '');
-  assert.match(stderr, /^usage: cli --add <text> \| --list \| --done <id>\n$/);
+  assert.match(stderr, /^usage: cli --add <text> \| --list \| --done <id> \| --version\n$/);
   assert.equal(code, 1);
 });
