@@ -3,7 +3,10 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { main } from '../src/cli.js';
+// test/index.js 在同一进程内聚合全部测试文件,而 src/cli.js 的 store 是模块级单例。
+// 用查询串获取独立的 cli.js 模块实例,等价于 node --test 按文件独立进程时的
+// “从空存储开始”语义,避免与同样依赖空存储的 count.test.js 互相污染。
+import { main } from '../src/cli.js?test-isolation';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
